@@ -1,2 +1,3 @@
-# Godot-HaxePlugin
-A Godot plugin for compiling and using Haxe code.
+# Haxe Plugin for Godot
+
+A general-use Godot plugin for compiling and using Haxe code.
