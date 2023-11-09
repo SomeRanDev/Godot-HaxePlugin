@@ -21,18 +21,9 @@ func _enter_tree():
 	add_tool_menu_item(HAXE_MENU_ITEM_NAME, func():
 		print("test");
 	);
-
-	# On tool item pressed
-	# popup_menu.connect("index_pressed", _on_menu_item_pressed);
 	
-	# Store options dialog
-	#window = popup_menu.get_node("Window");
-	#window.connect("close_requested", _on_settings_close);
-
-	#var settings = get_editor_interface().get_editor_settings();
-	
-	init_settings("haxe/compiler_call", TYPE_STRING, "haxe");
 	init_enum_setting("haxe/compiler_run_type", ["Run \"haxe\" Command", "Use Haxe Compiler Path"], 0);
+	init_settings("haxe/compiler_call", TYPE_STRING, "haxe");
 	ProjectSettings.save();
 
 func init_settings(name: String, type: Variant.Type, value: Variant):
@@ -55,25 +46,12 @@ func init_enum_setting(name: String, enums: Array[String], value: int):
 		"hint_string": ", ".join(enums)
 	});
 
-#func _on_menu_item_pressed(index: int):
-	#if index == 0:
-		#pass;
-	#if index == 1:
-		#window.popup_centered();
-#
-#func _on_settings_close():
-	#window.hide();
-
 func _exit_tree():
 	# Remove button
 	remove_control_from_container(CONTAINER_TOOLBAR, button_scene);
 	button_scene.free();
 
-	# Make sure window closed
-	#_on_settings_close();
-
 	remove_tool_menu_item(HAXE_MENU_ITEM_NAME);
-	#popup_menu.free();
 
 func _on_pressed():
 	# Execute "haxe compile.hxml" in parent directory
