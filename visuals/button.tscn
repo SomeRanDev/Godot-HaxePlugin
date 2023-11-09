@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://hrgu1a380cx6"]
+
+[ext_resource type="StyleBox" uid="uid://cva6tw1jcb4j2" path="res://addons/haxe_compiler/visuals/button_style.tres" id="1_xiils"]
+[ext_resource type="StyleBox" uid="uid://bj823xtd3d7ay" path="res://addons/haxe_compiler/visuals/hover_button_style.tres" id="2_4n7sh"]
+[ext_resource type="Texture2D" uid="uid://36ra24tllmex" path="res://addons/haxe_compiler/visuals/icon.png" id="3_88rkk"]
+
+[node name="HaxeCompilerScene" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VSeparator" type="VSeparator" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = ExtResource("1_xiils")
+theme_override_styles/hover = ExtResource("2_4n7sh")
+text = "Compile Haxe Code"
+icon = ExtResource("3_88rkk")
