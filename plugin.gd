@@ -3,9 +3,6 @@ extends EditorPlugin
 
 var button_scene: Control = null;
 
-var popup_menu: PopupMenu = null;
-var window: Window = null;
-
 const HAXE_MENU_ITEM_NAME = "Make Haxe Script for Current Node";
 
 func _enter_tree():
@@ -14,28 +11,31 @@ func _enter_tree():
 	add_control_to_container(CONTAINER_TOOLBAR, button_scene);
 	
 	# Add button signal
-	button_scene.get_node("Button").connect("pressed", _on_pressed);
+	button_scene.get_node("Button").connect("pressed", _on_haxe_compile_pressed);
 
-	# Setup tool buttons
-	popup_menu = preload("dialog/popup_menu.tscn").instantiate();
-	add_tool_menu_item(HAXE_MENU_ITEM_NAME, func():
-		print("test");
-	);
-	
-	init_enum_setting("haxe/compiler_run_type", ["Run \"haxe\" Command", "Use Haxe Compiler Path"], 0);
-	init_settings("haxe/compiler_call", TYPE_STRING, "haxe");
+	# Setup tool button
+	add_tool_menu_item(HAXE_MENU_ITEM_NAME, _on_haxe_script_create_pressed);
+
+	# Setup settings
+	setup_settings();
+
+func setup_settings():
+	init_enum_setting("haxe/compiler_run_type", 0, ["Run \"haxe\" Command", "Use Haxe Compiler Path"]);
+	init_settings("haxe/compiler_path", TYPE_STRING, "", PROPERTY_HINT_NONE);
+	init_settings("haxe/hxml_path", TYPE_STRING, "../compile.hxml", PROPERTY_HINT_GLOBAL_FILE);
 	ProjectSettings.save();
 
-func init_settings(name: String, type: Variant.Type, value: Variant):
+func init_settings(name: String, type: Variant.Type, value: Variant, hint: PropertyHint):
 	if !ProjectSettings.has_setting(name):
 		ProjectSettings.set_setting(name, value);
 	ProjectSettings.set_initial_value(name, value);
 	ProjectSettings.add_property_info({
 		"name": name,
-		"type": type
+		"type": type,
+		"hint": hint
 	});
 
-func init_enum_setting(name: String, enums: Array[String], value: int):
+func init_enum_setting(name: String, value: int, enums: Array[String]):
 	if !ProjectSettings.has_setting(name):
 		ProjectSettings.set_setting(name, value);
 	ProjectSettings.set_initial_value(name, value);
@@ -53,7 +53,7 @@ func _exit_tree():
 
 	remove_tool_menu_item(HAXE_MENU_ITEM_NAME);
 
-func _on_pressed():
+func _on_haxe_compile_pressed():
 	# Execute "haxe compile.hxml" in parent directory
 	var output = [];
 	var lsResult = OS.execute("CMD.exe", ["/C", "cd .. && haxe compile.hxml"], output, true, false);
@@ -68,3 +68,6 @@ func _on_pressed():
 	if output.size() > 0 && output[0].length() > 0:
 		print("\n-- Haxe Compiler Output --");
 		print(output[0]);
+
+func _on_haxe_script_create_pressed():
+	print(get_editor_interface());
