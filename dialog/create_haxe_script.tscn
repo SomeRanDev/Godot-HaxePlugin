@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://d2m50cmus0qo1"]
+
+[node name="Container" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CreateHaxeScript" type="Window" parent="."]
+size = Vector2i(300, 100)
+popup_window = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreateHaxeScript"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="CreateHaxeScript/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="CreateHaxeScript/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Class Name"
+
+[node name="LineEdit" type="LineEdit" parent="CreateHaxeScript/VBoxContainer/GridContainer"]
+layout_mode = 2
