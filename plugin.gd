@@ -6,6 +6,7 @@ const HAXE_MENU_ITEM_NAME = "Make Haxe Script for Current Node";
 
 # Singletons
 const Compiler = preload("./src/compile_haxe.gd");
+const CreateHaxeNode = preload("./src/create_haxe_node.gd");
 const Settings = preload("./src/settings.gd");
 
 const CreateHaxeScriptScene = preload("dialog/create_haxe_script.tscn");
@@ -30,10 +31,10 @@ func _enter_tree():
 	# Setup settings
 	Settings.setup_settings();
 
+	# Setup create Haxe script dialog
 	create_haxe_script_popup = CreateHaxeScriptScene.instantiate();
 	add_control_to_container(CONTAINER_TOOLBAR, create_haxe_script_popup);
-
-	var window = create_haxe_script_popup.get_node("Window");
+	window = create_haxe_script_popup.get_node("Window");
 	window.connect("close_requested", _on_haxe_script_close_requested);
 
 # On plugin stop...
@@ -44,10 +45,10 @@ func _exit_tree():
 
 	# Clean up tool menu
 	remove_tool_menu_item(HAXE_MENU_ITEM_NAME);
-	
-	_on_haxe_script_close_requested();
-	
-	window.free();
+
+	# Remove dialog
+	remove_control_from_container(CONTAINER_TOOLBAR, create_haxe_script_popup);
+	create_haxe_script_popup.free();
 
 func _on_haxe_compile_pressed():
 	Compiler.compile_haxe(
@@ -63,10 +64,9 @@ func _on_haxe_script_create_pressed():
 	assert(!nodes.is_empty(), "Must have a Node selected.");
 	assert(nodes.size() == 1, "Must have only one Node selected.");
 
-	var node = nodes[0];
-	var superClassName = node.get_class();
-
-	window.popup_centered();
+	CreateHaxeNode.prepare_dialog(nodes[0], Settings.get_source_path(), window);
 
 func _on_haxe_script_close_requested():
-	window.hide();
+	if window != null:
+		window.hide();
+		window.popup_window = false;
